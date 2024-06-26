@@ -15,8 +15,7 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgb(0,0,0);
-            background-color: rgba(0,0,0,0.4);
+            background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
         }
         .modal-content {
@@ -31,66 +30,81 @@
             float: right;
             font-size: 28px;
             font-weight: bold;
+            cursor: pointer;
         }
         .close:hover,
         .close:focus {
             color: black;
             text-decoration: none;
-            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
-<h2>Welcome to Our Project</h2>
-
-<p>Before using this project, please make sure to read and accept our <a href="https://github.com/SenpaiCummer/SenpaiCummer.github.io/blob/main/TERMS%20OF%20USE" target="_blank">Terms of Use</a>.</p>
-
-<!-- Trigger/Open The Modal -->
-<button id="myBtn">Read and Accept Terms of Use</button>
+<!-- Welcome message -->
+<div id="welcomeScreen">
+    <h2>Welcome to Our Project</h2>
+    <p>Before using this project, please make sure to read and accept our <a href="#" id="termsLink">Terms of Use</a>.</p>
+    <button id="myBtn">Read and Accept Terms of Use</button>
+</div>
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <p>By clicking accept, you agree to our <a href="https://github.com/SenpaiCummer/SenpaiCummer.github.io/blob/main/TERMS%20OF%20USE" target="_blank">Terms of Use</a>.</p>
-    <button id="acceptBtn">Accept</button>
-  </div>
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p>Please read and accept our <a href="#" id="modalTermsLink">Terms of Use</a> by clicking "Accept" below.</p>
+        <button id="acceptBtn">Accept</button>
+    </div>
 </div>
 
 <script>
-    // Get the modal
+    // Get references to elements
+    var welcomeScreen = document.getElementById("welcomeScreen");
     var modal = document.getElementById("myModal");
-
-    // Get the button that opens the modal
     var btn = document.getElementById("myBtn");
-
-    // Get the <span> element that closes the modal
     var span = document.getElementsByClassName("close")[0];
-
-    // Get the accept button
     var acceptBtn = document.getElementById("acceptBtn");
+    var termsLink = document.getElementById("termsLink");
+    var modalTermsLink = document.getElementById("modalTermsLink");
 
-    // When the user clicks the button, open the modal 
-    btn.onclick = function() {
+    // Set the href attribute for Terms of Use links
+    termsLink.href = "https://github.com/SenpaiCummer/SenpaiCummer.github.io/blob/main/TERMS%20OF%20USE";
+    modalTermsLink.href = "https://github.com/SenpaiCummer/SenpaiCummer.github.io/blob/main/TERMS%20OF%20USE";
+
+    // Function to show the modal
+    function showModal() {
         modal.style.display = "block";
     }
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() {
+    // Function to hide the modal
+    function hideModal() {
         modal.style.display = "none";
     }
 
-    // When the user clicks the accept button, close the modal
+    // When the user clicks the button, show the modal and hide the welcome screen
+    btn.onclick = function() {
+        showModal();
+        welcomeScreen.style.display = "none";
+    }
+
+    // When the user clicks on <span> (x), hide the modal and show the welcome screen
+    span.onclick = function() {
+        hideModal();
+        welcomeScreen.style.display = "block";
+    }
+
+    // When the user clicks the accept button, hide the modal and welcome screen
     acceptBtn.onclick = function() {
-        modal.style.display = "none";
+        hideModal();
+        welcomeScreen.style.display = "none";
         alert("Thank you for accepting the terms of use!");
     }
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
         if (event.target == modal) {
-            modal.style.display = "none";
+            hideModal();
+            welcomeScreen.style.display = "block";
         }
     }
 </script>
