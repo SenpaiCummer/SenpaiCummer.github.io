@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Terms of Use</title>
     <style>
-        /* Simple CSS for the modal */
-        .modal {
+        /* Simple CSS for the overlay */
+        .overlay {
             display: none;
             position: fixed;
             z-index: 1;
@@ -17,96 +17,62 @@
             overflow: auto;
             background-color: rgba(0, 0, 0, 0.4);
             padding-top: 60px;
+            text-align: center;
         }
-        .modal-content {
+        .overlay-content {
             background-color: #fefefe;
-            margin: 5% auto;
+            margin: 15% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+            max-width: 600px;
         }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
+        #acceptBtn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
             cursor: pointer;
-        }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
         }
     </style>
 </head>
 <body>
 
-<!-- Welcome message -->
-<div id="welcomeScreen">
-    <h2>Welcome to Our Project</h2>
-    <p>Before using this project, please make sure to read and accept our <a href="#" id="termsLink">Terms of Use</a>.</p>
-    <button id="myBtn">Read and Accept Terms of Use</button>
-</div>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <p>Please read and accept our <a href="#" id="modalTermsLink">Terms of Use</a> by clicking "Accept" below.</p>
+<!-- Overlay with Terms of Use message -->
+<div id="overlay" class="overlay">
+    <div class="overlay-content">
+        <p>By clicking accept, you agree to our <a href="#" id="termsLink">Terms of Use</a>.</p>
         <button id="acceptBtn">Accept</button>
     </div>
 </div>
 
+<!-- Your README.md content -->
+<div id="readmeContent">
+    <!-- Replace this with your actual README.md content -->
+    <h1>Welcome to My Project</h1>
+    <p>This is a description of my project.</p>
+    <p>Here's some more information about what this project does.</p>
+</div>
+
 <script>
     // Get references to elements
-    var welcomeScreen = document.getElementById("welcomeScreen");
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("myBtn");
-    var span = document.getElementsByClassName("close")[0];
+    var overlay = document.getElementById("overlay");
     var acceptBtn = document.getElementById("acceptBtn");
+    var readmeContent = document.getElementById("readmeContent");
+
+    // Set the href attribute for Terms of Use link
     var termsLink = document.getElementById("termsLink");
-    var modalTermsLink = document.getElementById("modalTermsLink");
-
-    // Set the href attribute for Terms of Use links
     termsLink.href = "https://github.com/SenpaiCummer/SenpaiCummer.github.io/blob/main/TERMS%20OF%20USE";
-    modalTermsLink.href = "https://github.com/SenpaiCummer/SenpaiCummer.github.io/blob/main/TERMS%20OF%20USE";
 
-    // Function to show the modal
-    function showModal() {
-        modal.style.display = "block";
-    }
-
-    // Function to hide the modal
-    function hideModal() {
-        modal.style.display = "none";
-    }
-
-    // When the user clicks the button, show the modal and hide the welcome screen
-    btn.onclick = function() {
-        showModal();
-        welcomeScreen.style.display = "none";
-    }
-
-    // When the user clicks on <span> (x), hide the modal and show the welcome screen
-    span.onclick = function() {
-        hideModal();
-        welcomeScreen.style.display = "block";
-    }
-
-    // When the user clicks the accept button, hide the modal and welcome screen
+    // When the user clicks the button, show the overlay
     acceptBtn.onclick = function() {
-        hideModal();
-        welcomeScreen.style.display = "none";
-        alert("Thank you for accepting the terms of use!");
+        overlay.style.display = "none"; // Hide the overlay
+        readmeContent.style.display = "block"; // Show the README.md content
     }
 
-    // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            hideModal();
-            welcomeScreen.style.display = "block";
-        }
-    }
+    // Initially show the overlay
+    overlay.style.display = "block";
 </script>
 
 </body>
